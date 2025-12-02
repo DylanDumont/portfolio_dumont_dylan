@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet – Portfolio</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2efe9;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FFC75E;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFAC56;
+        }
+
+        /* decorative dots */
+        .decorative-dot {
+            position: fixed;
+            border-radius: 50%;
+            background: #FFC75E;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); opacity: 0.6; }
+            50% { transform: translateY(-20px); opacity: 0.9; }
+        }
+
+        /* projet page */
+        .projet-container {
+            max-width: 900px;
+            margin: 60px auto 60px;
+            padding: 0 20px;
+        }
+
+        .projet-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .projet-gallery {
+            margin-bottom: 50px;
+        }
+
+        .gallery-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #ddd;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .gallery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .gallery-dot.active {
+            background: #FFAC56;
+            border-color: white;
+            transform: scale(1.2);
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-nav:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .gallery-prev {
+            left: 20px;
+        }
+
+        .gallery-next {
+            right: 20px;
+        }
+
+        .projet-content-section {
+            margin-bottom: 50px;
+        }
+
+        .projet-content-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .projet-tech {
+            margin-bottom: 50px;
+        }
+
+        .projet-tech h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFC75E 0%, #FFAC56 100%);
+            color: #333;
+            padding: 10px 18px;
+            margin: 8px 8px 8px 0;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 165, 86, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .tech-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 165, 86, 0.4);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #FF914D 0%, #FB923C 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 145, 77, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 145, 77, 0.5);
+        }
+
+        /* wave separator */
+        .wave-separator {
+            position: relative;
+            width: 100%;
+            height: auto;
+            margin: 0;
+        }
+
+        .wave-separator svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* footer */
+        footer {
+            background: #333;
+            color: #f2efe9;
+            text-align: center;
+            padding: 40px;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #FFC75E;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        footer a:hover {
+            color: #FFAC56;
+        }
+
+        /* responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 25px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            nav a {
+                font-size: 14px;
+            }
+
+            .projet-container {
+                margin: 120px auto 60px;
+                padding: 0 20px;
+            }
+
+            .projet-title {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+
+            .gallery-slide {
+                height: 280px;
+            }
+
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .projet-content-section p {
+                font-size: 15px;
+            }
+
+            .decorative-dot {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Points décoratifs -->
+    <div class="decorative-dot" style="width: 12px; height: 12px; top: 150px; left: 80px; animation-delay: 0s;"></div>
+    <div class="decorative-dot" style="width: 8px; height: 8px; top: 300px; right: 100px; animation-delay: 1s;"></div>
+    <div class="decorative-dot" style="width: 15px; height: 15px; top: 500px; left: 50px; animation-delay: 2s;"></div>
+    <div class="decorative-dot" style="width: 10px; height: 10px; top: 800px; right: 80px; animation-delay: 0.5s;"></div>
+
+    <main class="projet-container">
+        <h1 id="projet-title" class="projet-title"></h1>
+
+        <div class="projet-gallery">
+            <div class="gallery-container">
+                <div class="gallery-slides" id="gallery-slides"></div>
+                <button class="gallery-nav gallery-prev" onclick="changeSlide(-1)">‹</button>
+                <button class="gallery-nav gallery-next" onclick="changeSlide(1)">›</button>
+                <div class="gallery-controls" id="gallery-controls"></div>
+            </div>
+        </div>
+
+        <div id="projet-intro" class="projet-content-section">
+            <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">Description du projet</h3>
+            <p id="projet-description"></p>
+            
+            <h3 style="font-size: 18px; margin-top: 30px; margin-bottom: 10px; color: #333;">Mon rôle dans ce projet</h3>
+            <p id="projet-role"></p>
+        </div>
+
+        <div id="projet-details" class="projet-content-section" style="display: none;">
+            <p id="projet-context-text"></p>
+            <p id="projet-process-text"></p>
+            <p id="projet-result-text"></p>
+        </div>
+
+        <div id="projet-tech" class="projet-tech">
+            <h3>Technologies & Compétences</h3>
+            <div id="tech-container"></div>
+        </div>
+
+        <a href="index.html#projets" class="back-btn">← Retour aux projets</a>
+    </main>
+
+    <!-- Séparateur -->
+    <div class="wave-separator">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none" style="margin:0;display:block">
+            <path fill="#ffe669" d="M0 120q360-90 720 0t720 0V80q-360 90-720 0T0 80Z"/>
+            <path fill="#ffc75e" d="M0 160q360-90 720 0t720 0v-40q-360 90-720 0T0 160Z"/>
+            <path fill="#ffac56" d="M0 200q360-90 720 0t720 0v-40q-360 90-720 0T0 200Z"/>
+            <path fill="#ff914d" d="M0 240q360-90 720 0t720 0v-40q-360 90-720 0T0 240Z"/>
+            <path fill="#333333" d="M0 360h1440V240q-360 90-720 0T0 240Z"/>
+        </svg>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Dylan Dumont. Tous droits réservés. | <a href="index.html">Retour au portfolio</a></p>
+    </footer>
+
+    <script>
+        // --- Données des projets ---
+        const projets = {
+            "existence": {
+                title: "Existence Numérique – LITIS",
+                images: [
+                    "./img/litis1.png",
+                    "./img/litis2.png",
+                    "./img/litis3.png"
+                ],
+                description: "Existence Numérique est un site destiné à accompagner les personnes en difficulté avec le numérique. Il propose des explications accessibles, des tutoriels vidéos et des illustrations pour simplifier des tâches essentielles comme créer une adresse mail ou gérer ses mots de passe.",
+                role: "Nous étions trois à travailler sur le développement du site lors de notre stage au sein de LITIS. J’ai participé à la conception de l’interface, à la création d’illustrations pédagogiques et à l’intégration des contenus. J’ai également eu l’occasion de présenter le projet lors d’une conférence et d’échanger avec des personnes en situation de handicap sensoriel, ce qui m’a permis d’approfondir mes connaissances en accessibilité.",
+                tech: ["HTML/CSS", "PHP", "MySQL", "UX Design", "Illustration"]
+            },
+            "ecoquest": {
+                title: "EcoQuest",
+                images: [
+                    "./img/ecoquest1.png",
+                    "./img/ecoquest2.png",
+                    "./img/ecoquest3.png"
+                ],
+                description: "EcoQuest est un site web proposant un défi écologique quotidien, pensé pour encourager des habitudes simples et responsables. Les utilisateurs gagnent des points en relevant les défis, ce qui leur permet de personnaliser leur profil, suivre leur progression via un dashboard et interagir avec une communauté dédiée.",
+                role: "Nous étions cinq sur ce projet : trois personnes en charge de l’identité visuelle et des maquettes, et deux développeurs web. J’ai assuré une partie du développement avec la mise en place du back-end, la gestion des données et l’intégration du site en HTML, CSS, JavaScript, PHP et MySQL. J'ai aussi fait une illustration",
+                tech: ["PHP", "HTML/CSS", "MySQL", "JavaScript", "Illustration"]
+            },
+            "bowlistique": {
+                title: "Bowlistique",
+                images: [
+                    "./img/bowlistique1.png",
+                    "./img/bowlistique2.png"
+                ],
+                description: "Bowlistique est une plateforme conçue pour permettre aux joueurs de bowling de suivre leurs scores, analyser leur progression et comparer leurs performances via un dashboard clair et intuitif. Le site combine statistiques, historique et évolution visuelle.",
+                role: "J’ai conçu à la fois la charte graphique et l’ensemble du site. Cela inclut la création du design, le choix des couleurs (bleu pour la confiance, orange pour l’énergie), la mise en forme des données et l’intégration web. J’ai assuré tout le développement de la plateforme, de l’interface au système d’enregistrement des parties.",
+                tech: ["UX/UI", "Illustrator", "HTML/CSS", "JavaScript", "PHP/MySQL"]
+            },
+            "fastlearner": {
+                title: "FastLearner",
+                images: [
+                    "./img/fastlearner1.png",
+                    "./img/fastlearner2.png",
+                    "./img/fastlearner3.png"
+                ],
+                description: "Fastlearner est une entreprise spécialisée dans la création de formations en ligne, de contenus pédagogiques et de ressources interactives destinées à rendre l’apprentissage plus clair, plus visuel et plus accessible. Leur site vitrine sous WordPress présente leurs services, leurs formations certifiantes et leurs prestations pour les professionnels de la formation.",
+                role: "Durant mes trois mois de stage, j’ai participé à la refonte et à l’amélioration du site WordPress de l’entreprise en modernisant l’interface et en fluidifiant la navigation. J’ai également produit de nombreuses illustrations, visuels pédagogiques et miniatures destinées aux formations. Enfin, j’ai réalisé plusieurs montages vidéo via Camtasia pour enrichir les modules de formation et optimiser la qualité des ressources proposées.",
+                tech: ["WordPress", "Illustrator", "Camtasia", "UI Design"]
+            },
+            "aetheria": {
+                title: "Guardian of Aetheria",
+                images: [
+                    "./img/guardian1.png",
+                    "./img/guardian2.png",
+                    "./img/guardian3.png"
+                ],
+                description: "Guardian of Aetheria est un jeu mêlant aventure, énigmes et magie, où le joueur utilise les pouvoirs des éléments pour rééquilibrer un monde fantastique. L’expérience repose sur l’exploration, la réflexion et l’immersion dans un univers narratif.",
+                role: "Dans une équipe de six personnes, je me suis chargé de toute la communication visuelle : affiches, posts et énigmes interactives pour les réseaux sociaux, retouches photos, bannière YouTube, teaser vidéo ainsi que plusieurs supports promotionnels. J’ai également créé une énigme jouable sous Unity basée sur un système de cibles à atteindre.",
+                tech: ["Illustration", "Direction Artistique", "Réseaux Sociaux", "Montage Vidéo"]
+            },
+            "mewtwo": {
+                title: "Jungko vs Mewtwo",
+                images: [
+                    "./img/mewtwo1.png",
+                    "./img/mewtwo2.png"
+                ],
+                description: "Ce projet consistait à créer plusieurs supports graphiques pour un événement fictif mettant en scène un affrontement entre Jungko et Mewtwo. L’univers visuel repose sur un contraste fort entre le vert, le mauve et un fond noir, pour une ambiance percutante et dynamique.",
+                role: "J’ai réalisé l’ensemble des productions graphiques : affiche principale, invitation numérique, wireframe et ticket d’entrée. J’ai utilisé Indesign, Photoshop et Illustrator pour combiner illustration, typographie et mise en page dans un ensemble cohérent.",
+                tech: ["Photoshop", "Illustrator", "InDesign", "Design Graphique"]
+            }
+        };
+
+        let currentSlide = 0;
+        let totalSlides = 0;
+
+        // --- Chargement dynamique ---
+        function loadProjet() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            const projet = projets[id];
+
+            if (projet) {
+                document.getElementById("projet-title").textContent = projet.title;
+                document.getElementById("projet-description").textContent = projet.description;
+                document.getElementById("projet-role").textContent = projet.role;
+
+                // Charger la galerie d'images
+                totalSlides = projet.images.length;
+                const gallerySlidesDiv = document.getElementById("gallery-slides");
+                gallerySlidesDiv.innerHTML = "";
+                projet.images.forEach(img => {
+                    const slide = document.createElement("div");
+                    slide.classList.add("gallery-slide");
+                    slide.innerHTML = `<img src="${img}" alt="Projet image">`;
+                    gallerySlidesDiv.appendChild(slide);
+                });
+
+                // Créer les points de galerie
+                const galleryControls = document.getElementById("gallery-controls");
+                galleryControls.innerHTML = "";
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement("div");
+                    dot.classList.add("gallery-dot");
+                    if (i === 0) dot.classList.add("active");
+                    dot.onclick = () => goToSlide(i);
+                    galleryControls.appendChild(dot);
+                }
+
+                // Charger le contenu contextuel s'il existe
+                if (projet.context) {
+                    document.getElementById("projet-context-text").textContent = projet.context;
+                    document.getElementById("projet-details").style.display = "block";
+                }
+                if (projet.process) {
+                    document.getElementById("projet-process-text").textContent = projet.process;
+                    document.getElementById("projet-details").style.display = "block";
+                }
+                if (projet.result) {
+                    document.getElementById("projet-result-text").textContent = projet.result;
+                    document.getElementById("projet-details").style.display = "block";
+                }
+
+                // Charger les technologies
+                const techContainer = document.getElementById("tech-container");
+                techContainer.innerHTML = "";
+                projet.tech.forEach(t => {
+                    const tag = document.createElement("span");
+                    tag.classList.add("tech-tag");
+                    tag.textContent = t;
+                    techContainer.appendChild(tag);
+                });
+            } else {
+                document.querySelector(".projet-container").innerHTML = `
+                    <h1 style="font-size: 36px; margin: 60px 0 20px;">Projet introuvable</h1>
+                    <p style="font-size: 18px; margin-bottom: 30px;">Le projet demandé n'existe pas.</p>
+                    <a href="index.html#projets" class="back-btn">← Retour aux projets</a>
+                `;
+            }
+        }
+
+        // --- Gallery navigation functions ---
+        function changeSlide(n) {
+            goToSlide(currentSlide + n);
+        }
+
+        function goToSlide(n) {
+            currentSlide = (n + totalSlides) % totalSlides;
+            const gallerySlidesDiv = document.getElementById("gallery-slides");
+            gallerySlidesDiv.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Mettre à jour les points actifs
+            document.querySelectorAll(".gallery-dot").forEach((dot, i) => {
+                dot.classList.toggle("active", i === currentSlide);
+            });
+        }
+
+        loadProjet();
+    </script>
+
+</body>
+</html>
